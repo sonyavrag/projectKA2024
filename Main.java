@@ -15,22 +15,8 @@ public class Main {
         }
         mergeSort(numbers, 0, counter - 1);
 
-        double mediana;
-        if (counter % 2 == 0) {
-            int middleElementIndex = counter / 2;
-            mediana = (numbers[middleElementIndex - 1] + numbers[middleElementIndex]) / 2.0;
-        } else {
-            mediana = numbers[counter / 2];
-        }
-
-        double sum = 0;
-        for (int i = 0; i < counter; i++) {
-            sum += numbers[i];
-        }
-        double average = sum / counter;
-
-        System.out.println("Медіана: " + mediana);
-        System.out.println("Середнє значення: " + average);
+        System.out.println("Медіана: " + calculateMediana(counter, numbers));
+        System.out.println("Середнє значення: " + calculateAverage(counter, numbers));
     }
 
     // розбиває масив на дві половини та сортує далі кожну половину, поки елементи не стануть одиничними
@@ -40,5 +26,24 @@ public class Main {
             mergeSort(array, left, middleElementIndex);
             mergeSort(array, middleElementIndex + 1, right);
         }
+    }
+
+    private static double calculateMediana(int counter, int[] numbers) {
+        double mediana;
+        if (counter % 2 == 0) {
+            int middleElementIndex = counter / 2;
+            mediana = (numbers[middleElementIndex - 1] + numbers[middleElementIndex]) / 2.0;
+        } else {
+            mediana = numbers[counter / 2];
+        }
+        return mediana;
+    }
+
+    private static double calculateAverage(int counter, int[] numbers) {
+        double sum = 0;
+        for (int i = 0; i < counter; i++) {
+            sum += numbers[i];
+        }
+        return sum / counter;
     }
 }
