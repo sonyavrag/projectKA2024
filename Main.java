@@ -12,12 +12,12 @@ public class Main {
             // перетворює елементи стрічки на цілі числа та записує їх у масив
             for (String e : elementsArray) {
                 int element = Integer.parseInt(e);
-                numbers[counter++] = element;
+                numbers[counter++] = Integer.parseInt(Integer.toBinaryString(element));
             }
             mergeSort(numbers, 0, counter - 1);
 
-            System.out.println("Медіана: " + calculateMediana(counter, numbers));
-            System.out.println("Середнє значення: " + calculateAverage(counter, numbers));
+            System.out.println("Медіана: " + Integer.parseInt(calculateMediana(counter, numbers), 2));
+            System.out.println("Середнє значення: " + Integer.parseInt(calculateAverage(counter, numbers), 2));
             int check = DataInput.getInt("Повторити операцію? ТАК - 1, НІ - 2. ");
             if (check == 2) break;
         }
@@ -34,23 +34,25 @@ public class Main {
         }
     }
 
-    private static double calculateMediana(int counter, int[] numbers) {
-        double mediana;
+    private static String calculateMediana(int counter, int[] numbers) {
+        String mediana;
         if (counter % 2 == 0) {
             int middleElementIndex = counter / 2;
-            mediana = (numbers[middleElementIndex - 1] + numbers[middleElementIndex]) / 2.0;
+            mediana = Integer.toBinaryString((Integer.parseInt(String.valueOf(numbers[middleElementIndex - 1]), 2)
+                    + Integer.parseInt(String.valueOf(numbers[middleElementIndex]), 2)) / 2);
+            ;
         } else {
-            mediana = numbers[counter / 2];
+            mediana = String.valueOf(numbers[counter / 2]);
         }
         return mediana;
     }
 
-    private static double calculateAverage(int counter, int[] numbers) {
-        double sum = 0;
+    private static String calculateAverage(int counter, int[] numbers) {
+        int sum = 0;
         for (int i = 0; i < counter; i++) {
-            sum += numbers[i];
+            sum += Integer.parseInt(String.valueOf(numbers[i]), 2);
         }
-        return sum / counter;
+        return Integer.toBinaryString((sum / counter));
     }
 
     // обʼєднує два відсортовані підмасиви
