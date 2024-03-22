@@ -36,6 +36,19 @@ nextStep:
     pop cx
     loop outerLoop
 
+    mov ax, 7FFFh
+    add ax, 0FFFh
+
+    xor dx,dx       ; DX - 32-bit hi-word
+    mov ax, 7FFFh   ; AX - 32-bit lo-word
+    add ax, 7FFFh   ; add 16bit signed value
+    adc dx, 0       ; note that OF=0! 
+
+    mov dx, 0FFh
+    mov ax, 0h
+    mov bx, 1500
+    div bx  ; DX:AX / 1500, result in ax
+
     test ax,ax
     jns oi1
     mov cx,ax
