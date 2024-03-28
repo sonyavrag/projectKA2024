@@ -13,6 +13,7 @@
  sum dw 0 ; contains sum of 3*10^2 + 5*10^1 + 5*10^0 = 355
  arrayIndex dw 0 ; for index of array
  countForArrayEl db 0 ; counter for elements of array
+ median dw ? ; variable for median
 .code
 
 main:
@@ -40,6 +41,27 @@ main:
             jmp read_next
     ; converts symbols to numbers, checks if symbol from input = 0-9 , if so number becomes 0-9
     calculate:
+
+    jmp bubble_sort
+    bubble_sort:
+
+    mov cx, word ptr count ;count to cx
+outerLoop:
+    lea si, array ;loads the array address into the si
+innerLoop:
+    mov ax, [si] ; copy current element of array to ax
+    cmp ax, [si+2] ; compare current element of array to next one
+    jl nextStep ; if current element is less then next one, jump to nextStep
+    xchg [si+2], ax ; exchange current number with next one
+    mov [si], ax ; copy current element on next element position
+nextStep:
+    add si, 2 ; to go to next element of array
+    dec cx ; -1 to count
+    cmp cx, 0 ; checks if there are more elements of array
+    jne innerLoop ; if there are more elements of array jump to nextStep
+    xor cx,cx ;cx = 0
+    mov cx, word ptr count;count to cx
+
     lea si, temp ;loads the address of first element of temp into the si
     mov ax, [si]
     cmp al, 30h ; checks if symbol from input = '0'
@@ -125,7 +147,7 @@ main:
         mov [arrayIndex], si ; next element of array to arrayIndex
         inc countForArrayEl ; +1 tocountForArrayEl
         jmp read_next ; jump to read_next
-        
+
         ;     lea si, array ;loads the array address into the si
 ; innerLoop:
 ;     mov ax, [si] ; copy current element of array to ax
@@ -159,6 +181,29 @@ main:
     ifNoEndOfLine:
     or ax,ax ; checks if ax=0
     jnz read_next ; if ax=0 repeat the input
+
+    call calculate_median
+    calculate_median:
+    call bubble_sort
+    mov ax, count ; copy count of elements in array to ax
+
+        test al, 1 ; операція конʼюнкції, if result is 0 then number is even , if 1 then uneven
+        jnz uneven_num ; if uneven jump to uneven_num
+        shr ax, 1 ; бітовий зсув праворуч на один біт(ділення на 2 з відокремненням цілої частини)
+        mov bx, ax ; ax to bx
+        dec bx ; -1 to bx
+        mov ax, array[bx] ; save first middle number
+        add ax, array[bx+1] ; first middle number + second middle number
+        shr ax, 1 ; бітовий зсув праворуч на один біт(ділення на 2 з відокремненням цілої частини)
+        jmp save_median
+        uneven_num:
+            mov bx, ax ; ax to bx
+            mov ax, array[bx]; save middle number
+            jmp save_median
+        save_median:
+            mov median, ax ; save middle number in median
+        ret
+
 
 ;     mov bx, oneChar ; copy oneChar to bx
 ;     ; adding numbers from input to array
