@@ -14,6 +14,7 @@
  arrayIndex dw 0 ; for index of array
  countForArrayEl db 0 ; counter for elements of array
  median dw ? ; variable for median
+ average dw ? ; variable for average
 .code
 
 main:
@@ -147,24 +148,7 @@ nextStep:
         mov [arrayIndex], si ; next element of array to arrayIndex
         inc countForArrayEl ; +1 tocountForArrayEl
         jmp read_next ; jump to read_next
-
-        ;     lea si, array ;loads the array address into the si
-; innerLoop:
-;     mov ax, [si] ; copy current element of array to ax
-;     cmp ax, [si+2] ; compare current element of array to next one
-;     jl nextStep ; if current element is less then next one, jump to nextStep
-;     xchg [si+2], ax ; exchange current number with next one
-;     mov [si], ax ; copy current element on next element position
-; nextStep:
-;     add si, 2 ; to go to next element of array
-;     dec cx ; -1 to count
-;     cmp cx, 0 ; checks if there are more elements of array
-;     jne innerLoop ; if there are more elements of array jump to nextStep
-;     ;loop innerLoop
-;     ;pop cx
-;     xor cx,cx ;cx = 0
-;     mov cx, word ptr count;count to cx
-;       jmp print_out ; jump to print out
+        
 ;output
         print_out:
         lea si, array ;loads the array address into the si
@@ -203,6 +187,26 @@ nextStep:
         save_median:
             mov median, ax ; save middle number in median
         ret
+
+    call calculate_average
+    calculate_average:
+    call bubble_sort
+    xor bx, bx ; bx = loop counter = 0
+        mov cx, count ; copy count of elements in array to cx
+        sum_loop:
+            mov ax, array[bx] ; current number to ax
+            add sum, ax ; +sum
+            inc bx ; +1 to bx = loop counter
+            cmp cx, 0
+            je divide
+            jne sum_loop ;repeat while cx != 0
+        
+        divide:
+        mov ax, sum ; sum to ax
+        idiv count ; divide sum by count of numbers in array
+        mov average, ax ; save average value in average
+        ret
+
 
 
 ;     mov bx, oneChar ; copy oneChar to bx
