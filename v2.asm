@@ -19,8 +19,9 @@
 
 main:
   lea si, array ;loads the array address into the si
-  mov [arrayIndex], si
-  mov di,0
+  mov [arrayIndex], si ; address of array is now in arrayIndex
+  mov di,0 ; di = 0
+
          read_next:
             mov ah, 3Fh
             mov bx, 0h  ; stdin handle
@@ -28,6 +29,7 @@ main:
             mov dl, offset oneChar   ; read to ds:dx 
             int 21h   ;  ax = number of bytes read
 ; converts symbols to numbers
+
     mov bl, oneChar ; copy oneChar to bl
     cmp bl, 13
     je print_out
@@ -35,10 +37,10 @@ main:
     je calculate ; if ' ' jump to calculate
     jne savenum ; if input is number jump to savenum
             savenum:
-            mov si, [arrayIndex] ;loads the temp address into the si
+            mov si, [arrayIndex] ;loads the arrayIndex address into the si
             inc count ; +1 count
-            mov [si], bl ; copy bl to temp
-            inc si ; +1 si, next element of temp
+            mov [si], bl ; copy bl to arrayIndex
+            inc si ; +1 si, next element of array
             jmp read_next
     ; converts symbols to numbers, checks if symbol from input = 0-9 , if so number becomes 0-9
     calculate:
@@ -71,60 +73,70 @@ nextStep:
     saveZero:
     mov number, 0 ; number = 0
     afterZero:
+
     cmp al, 31h 
     je saveOne
     jne afterOne
     saveOne:
     mov number,1
     afterOne:
+
     cmp al, 32h
     je saveTwo
     jne afterTwo
     saveTwo:
     mov number,2
     afterTwo:
+
     cmp al, 33h
     je saveThree
     jne afterThree
     saveThree:
     mov number, 3
     afterThree:
+
     cmp al, 34h
     je saveFour
     jne afterFour
     saveFour:
     mov number, 4
     afterFour:
+
     cmp al, 35h
     je saveFive
     jne afterFive
     saveFive:
     mov number, 5
     afterFive:
+
     cmp al, 36h
     je saveSix
     jne afterSix
     saveSix:
     mov number, 6
     afterSix:
+
     cmp al, 37h
     je saveSeven
     jne afterSeven
     saveSeven:
     mov number, 7
     afterSeven:
+
     cmp al, 38h
     je saveEight
     jne afterEight
     saveEight:
     mov number, 8
     afterEight:
+
     cmp al, 39h
     je saveNine
     jne afterNine
     saveNine:
     mov number, 9
     afterNine:
+
     ; multiply number by its base in power of its largest byte
     mov di,count ; count to di
     dec di ; -1 to di
@@ -140,15 +152,16 @@ nextStep:
     je saveToArray ; if so , jump to saveToArray
     jne calculate ; if no , repeat
     ; saves sum to array
+
     saveToArray:
-        lea si, [arrayIndex] ; saves current array index to si
+        lea si, [arrayIndex] ; saves current availablearray index to si
         mov ax,sum ; copy sum to ax
         mov [bp] , ax ; sum to bp
         inc si ; +1 to si
         mov [arrayIndex], si ; next element of array to arrayIndex
         inc countForArrayEl ; +1 tocountForArrayEl
         jmp read_next ; jump to read_next
-        
+
 ;output
         print_out:
         lea si, array ;loads the array address into the si
@@ -162,11 +175,13 @@ nextStep:
         jne print_out ; if there are more elements of array repeat the cycle
     xor cx,cx ;cx = 0
     je read_next ; repeat the input
+
     ifNoEndOfLine:
     or ax,ax ; checks if ax=0
     jnz read_next ; if ax=0 repeat the input
 
     call calculate_median
+
     calculate_median:
     call bubble_sort
     mov ax, count ; copy count of elements in array to ax
@@ -189,6 +204,7 @@ nextStep:
         ret
 
     call calculate_average
+    
     calculate_average:
     call bubble_sort
     xor bx, bx ; bx = loop counter = 0
