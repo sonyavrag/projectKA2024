@@ -151,8 +151,8 @@ nextStep:
     cmp count, 0 ; checks if there are more elements of array
     je saveToArray ; if so , jump to saveToArray
     jne calculate ; if no , repeat
-    ; saves sum to array
 
+    ; saves sum to array
     saveToArray:
         lea si, [arrayIndex] ; saves current availablearray index to si
         mov ax,sum ; copy sum to ax
@@ -162,7 +162,7 @@ nextStep:
         inc countForArrayEl ; +1 tocountForArrayEl
         jmp read_next ; jump to read_next
 
-;output
+      ;output
         print_out:
         lea si, array ;loads the array address into the si
         mov bl,[si] ; copy current element of array to bl
@@ -177,11 +177,13 @@ nextStep:
     je read_next ; repeat the input
 
     ifNoEndOfLine:
+
     or ax,ax ; checks if ax=0
     jnz read_next ; if ax=0 repeat the input
 
-    call calculate_median
 
+    call calculate_median
+    
     calculate_median:
     call bubble_sort
     mov ax, count ; copy count of elements in array to ax
@@ -203,8 +205,9 @@ nextStep:
             mov median, ax ; save middle number in median
         ret
 
+
     call calculate_average
-    
+
     calculate_average:
     call bubble_sort
     xor bx, bx ; bx = loop counter = 0
@@ -222,98 +225,4 @@ nextStep:
         idiv count ; divide sum by count of numbers in array
         mov average, ax ; save average value in average
         ret
-
-
-
-;     mov bx, oneChar ; copy oneChar to bx
-;     ; adding numbers from input to array
-;     mov [si], bx ; copy bx to array
-;     inc si ; add +1 to si
-;     inc count ; add +1 to counter
-;     cmp bx, 206Bh ; 206Bh = k , checks if 'k' was typed
-;     ; printing 'a' for example if 'k'=206Bh is printed
-;     je calculate_mod ; if k was typed, jump to mod calculations
-;     jne ifNoEndOfLine ; if k wasn't typed , jump to ifNoEndOfLine and repeat the cycle
-;     calculate_mod: ; mod calculations and bubble sort
-;       jmp bubbleSort
-;       bubbleSort:
-;     mov cx, word ptr count ;count to cx
-;     ;dec cx  ; count-1
-; outerLoop:
-;     ;push cx
-; print_out:
-; lea si, array 
-; mov bl,[si]
-; mov cx, word ptr count
-;     mov ah, 02h
-;     mov dl, bl
-;     int 21h
-;     dec cx
-;     cmp cx,0
-;     jne print_out
-;     je read_next
-
-;     bubbleSort:
-;     mov cx, word ptr count
-;     ;dec cx  ; count-1
-; outerLoop:
-;     push cx
-;     lea si, array
-; innerLoop:
-;     mov ax, [si]
-;     cmp ax, [si+2]
-;     jl nextStep
-;     xchg [si+2], ax
-;     mov [si], ax
-; nextStep:
-;     add si, 2
-;     loop innerLoop
-;     pop cx
-;     ret
-    ;loop outerLoop
-
-;     mov ax, 7FFFh
-;     add ax, 0FFFh
-
-;     xor dx,dx       ; DX - 32-bit hi-word
-;     mov ax, 7FFFh   ; AX - 32-bit lo-word
-;     add ax, 7FFFh   ; add 16bit signed value
-;     adc dx, 0       ; note that OF=0! 
-
-;     mov dx, 0FFh
-;     mov ax, 0h
-;     mov bx, 1500
-;     div bx  ; DX:AX / 1500, result in ax
-
-;     test ax,ax
-;     jns oi1
-;     mov cx,ax
-;     mov ah, 02h
-;     mov dl,'-'
-;     int 21h
-;     mov ax,cx
-;     neg ax
-;     ; кіл-ть цифр в сх
-;     oi1:
-;     xor cx,cx
-;     mov bx,10
-;     oi2:
-;     xor dx,dx
-;     div bx
-;     push dx
-;     inc cx
-;     test ax,ax
-;     jnz oi2
-;     mov ah, 02h
-;     oi3:
-;     pop dx
-;     cmp dl,9
-;     jbe oi4
-;     add dl,7
-;     oi4:
-;     add dl,'0'
-;     int 21h
-;     ;зациклення на к-ть цифр
-;     loop oi3
-;     ret
 end main
